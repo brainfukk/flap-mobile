@@ -23,6 +23,33 @@ class ProfileCard extends StatefulWidget {
 class _ProfileCardState extends State<ProfileCard> {
   var user = {};
 
+  showAlertDialog(BuildContext context) {
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Coming soon..."),
+      content: Text("Disabled. Technical updating"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -46,7 +73,6 @@ class _ProfileCardState extends State<ProfileCard> {
       username = user['username'];
       points = user['points'];
       avatar = "${dotenv.env['API_HOST']}${user['avatar']['source']}";
-      print(avatar);
     }
 
     final Color inActiveIconColor = const Color(0xFF292D32).withOpacity(0.5);
@@ -88,11 +114,17 @@ class _ProfileCardState extends State<ProfileCard> {
                       borderRadius: BorderRadius.circular(10)),
                   child: TextButton(
                     style: flatButtonStyle,
-                    onPressed: () => Navigator.pushNamed(context, '/shop'),
+                    // onPressed: () => Navigator.pushNamed(context, '/shop'),
+                    onPressed: () {
+                      showAlertDialog(context);
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Shop', style: TextStyle(color: Colors.white)),
+                        const Text(
+                          'Shop',
+                          style: TextStyle(color: Colors.white),
+                        ),
                         SvgPicture.asset(
                           "assets/icons/profile_image.svg",
                           height: 100,
@@ -131,7 +163,8 @@ class _ProfileCardState extends State<ProfileCard> {
                       child: CircleAvatar(
                         backgroundColor: HexColor.fromHex("#4A0094"),
                         radius: 52,
-                        backgroundImage: NetworkImage(avatar),
+                        backgroundImage:
+                            avatar.length > 0 ? NetworkImage(avatar) : null,
                       ),
                     ),
                     // child: Image.asset(

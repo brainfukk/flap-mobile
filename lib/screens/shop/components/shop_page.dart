@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flap/Requests/api_shop_request.dart';
 import 'package:flap/constante.dart';
 import 'package:flutter/material.dart';
 import 'package:flap/models/shop/card.dart';
@@ -10,8 +13,27 @@ class ShopPage extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<ShopPage> {
+  var shop_items = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    getShopItems().then((value) {
+      var data = jsonDecode(value.body);
+      print(data);
+      setState(() {
+        shop_items = data;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (shop_items.length > 0) {
+      print(shop_items);
+    }
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: ListView(
@@ -28,15 +50,15 @@ class _MyStatefulWidgetState extends State<ShopPage> {
                     mainAxisSpacing: 15,
                     childAspectRatio: 1.1,
                     children: [
-                      for (var card in demoCards)
+                      for (var card in shop_items)
                         _buildCard(
-                            card.id,
-                            card.name,
-                            card.imageRoute,
-                            card.coinCost,
-                            card.levelIndicator,
-                            card.isBought,
-                            card.buymethod,
+                            card["id"],
+                            card["name"],
+                            card["source"],
+                            card["cost"],
+                            10,
+                            false, // is_bought
+                            // card["buy_method"],
                             context)
                     ]))
           ],
@@ -44,9 +66,19 @@ class _MyStatefulWidgetState extends State<ShopPage> {
   }
 
   Widget _buildCard(int id, String name, String imageRoute, int coinCost,
-      int levelIndicator, bool isBought, BuyMethod buymethod, context) {
+      int levelIndicator, bool isBought, context) {
+    print([
+      id,
+      name,
+      imageRoute,
+      coinCost,
+      levelIndicator,
+      isBought,
+      imageRoute,
+      'dfasdfs'
+    ]);
     return Padding(
-        padding: EdgeInsets.only(top: 10, bottom: 5, left: 5, right: 5),
+        padding: const EdgeInsets.only(top: 10, bottom: 5, left: 5, right: 5),
         child: InkWell(
             onTap: () {},
             child: Container(
@@ -65,30 +97,42 @@ class _MyStatefulWidgetState extends State<ShopPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Hero(
-                            tag: imageRoute,
-                            child: Container(
-                                height: 150.0,
-                                width: 150.0,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage(imageRoute),
-                                        fit: BoxFit.contain)))),
-                        Text(name,
-                            style: TextStyle(
-                                color: Color(0xFF575E67), fontSize: 18.0)),
+                          tag: imageRoute,
+                          child: Container(
+                            height: 150.0,
+                            width: 150.0,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(imageRoute),
+                                  fit: BoxFit.contain),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          name,
+                          style: const TextStyle(
+                            color: Color(0xFF575E67),
+                            fontSize: 18.0,
+                          ),
+                        ),
                         Padding(
-                            padding: EdgeInsets.only(right: 22),
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image(
-                                      image:
-                                          AssetImage('assets/icons/coin.png')),
-                                  Text(buymethod.coinCost.toString(),
-                                      style: TextStyle(
-                                          color: Color(0xFFCC8053),
-                                          fontSize: 14.0)),
-                                ])),
+                          padding: const EdgeInsets.only(right: 22),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Image(
+                                image: AssetImage('assets/icons/coin.png'),
+                              ),
+                              Text(
+                                coinCost.toString(),
+                                style: const TextStyle(
+                                  color: Color(0xFFCC8053),
+                                  fontSize: 14.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
 
@@ -100,8 +144,8 @@ class _MyStatefulWidgetState extends State<ShopPage> {
                         animationDuration: Duration(milliseconds: 400),
                         expansionCallback: (int index, bool isExpanded) {
                           setState(() {
-                            print(buymethod.isExpanded);
-                            buymethod.isExpanded = !isExpanded;
+                            // print(buymethod.isExpanded);
+                            // buymethod.isExpanded = !isExpanded;
                           });
                         },
                         children: [
@@ -116,9 +160,7 @@ class _MyStatefulWidgetState extends State<ShopPage> {
                               },
                               body: Column(children: [
                                 ListTile(
-                                  title: Text(
-                                      "Монеты - " +
-                                          buymethod.coinCost.toString(),
+                                  title: Text("Монеты - " + coinCost.toString(),
                                       style: TextStyle(color: Colors.white)),
                                   // subtitle: const Text(
                                   //     'To delete this panel, tap the trash can icon'),
@@ -141,7 +183,7 @@ class _MyStatefulWidgetState extends State<ShopPage> {
                                 ListTile(
                                     title: Text(
                                         "Уровень - " +
-                                            buymethod.levelCost.toString(),
+                                            levelIndicator.toString(),
                                         style: TextStyle(color: Colors.white)),
                                     // subtitle: const Text(
                                     //     'To delete this panel, tap the trash can icon'),
@@ -154,7 +196,7 @@ class _MyStatefulWidgetState extends State<ShopPage> {
                                     },
                                     dense: true),
                               ]),
-                              isExpanded: buymethod.isExpanded),
+                              isExpanded: false),
                         ])
                   ],
                 ))));
