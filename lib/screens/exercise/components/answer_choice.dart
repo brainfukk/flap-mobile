@@ -269,3 +269,105 @@ class _SelectComponentState extends State<SelectComponent> {
     );
   }
 }
+
+class InTextWriteComponent extends StatefulWidget {
+  final int exerciseId;
+  final String content;
+  final String? source;
+  final Function callback;
+
+  const InTextWriteComponent({
+    Key? key,
+    required this.content,
+    required this.exerciseId,
+    required this.callback,
+    this.source,
+  }) : super(key: key);
+
+  @override
+  _InTextWriteComponentState createState() => _InTextWriteComponentState();
+}
+
+class _InTextWriteComponentState extends State<InTextWriteComponent> {
+  late Map<String, String> userAnswers = {};
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    var regs = RegExp(r'(%\d+%)', multiLine: true);
+    var allMatches =
+        regs.allMatches(widget.content).map((m) => m.group(0).toString());
+    List<Widget> items = [];
+
+    widget.content.split(" ").forEach((val) {
+      if (allMatches.contains(val)) {
+        var inTextId = val.split("%")[1].toString();
+        items.add(FittedBox(
+          child: WirteInput(
+            inTextId: inTextId,
+            callback: (inTextId, val) {
+              setState(() {
+                userAnswers[inTextId] = val;
+                widget.callback(
+                  widget.exerciseId,
+                  userAnswers,
+                );
+              });
+              return 0;
+            },
+          ),
+        ));
+      } else {
+        items.add(FittedBox(
+          child: Text(
+            val + " ",
+            style: const TextStyle(
+              fontSize: 16,
+              // height: 1,
+            ),
+          ),
+        ));
+      }
+    });
+
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: items,
+      spacing: 2,
+      runSpacing: 20.0,
+    );
+  }
+}
+
+class WirteInput extends StatefulWidget {
+  final Function callback;
+  final String inTextId;
+
+  const WirteInput({
+    Key? key,
+    required this.callback,
+    required this.inTextId,
+  }) : super(key: key);
+
+  @override
+  _WirteInputState createState() => _WirteInputState();
+}
+
+class _WirteInputState extends State<WirteInput> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 20,
+      width: 200,
+      child: TextField(
+        textAlignVertical: TextAlignVertical.center,
+        textAlign: TextAlign.center,
+        onChanged: (String? val) {
+          setState(() {
+            widget.callback(widget.inTextId, val);
+          });
+        },
+      ),
+    );
+  }
+}

@@ -12,6 +12,7 @@ class UnitBox extends StatefulWidget {
   final String answeredQuestions;
   final String content;
   final void Function()? onPressed;
+  final bool isDiabled;
 
   const UnitBox({
     Key? key,
@@ -22,6 +23,7 @@ class UnitBox extends StatefulWidget {
     required this.answeredQuestions,
     required this.onPressed,
     required this.content,
+    required this.isDiabled,
   }) : super(key: key);
 
   @override
@@ -51,7 +53,7 @@ class _UnitBoxState extends State<UnitBox> {
                       widget.unitTitle,
                       style: TextStyle(
                         fontSize: widget.height * 0.15,
-                        color: Colors.black,
+                        color: widget.isDiabled ? Colors.grey : Colors.black,
                       ),
                     ),
                     SizedBox(width: widget.width * 0.04),
@@ -68,7 +70,8 @@ class _UnitBoxState extends State<UnitBox> {
                             '${widget.progress}%',
                             style: TextStyle(
                               fontSize: widget.height * 0.11,
-                              color: Colors.black,
+                              color:
+                                  widget.isDiabled ? Colors.grey : Colors.black,
                             ),
                           ),
                         ),
@@ -79,7 +82,7 @@ class _UnitBoxState extends State<UnitBox> {
                       widget.answeredQuestions,
                       style: TextStyle(
                         fontSize: widget.height * 0.11,
-                        color: Colors.black,
+                        color: widget.isDiabled ? Colors.grey : Colors.black,
                       ),
                     ),
                   ],
@@ -92,7 +95,9 @@ class _UnitBoxState extends State<UnitBox> {
                   child: Text(
                     widget.content,
                     style: TextStyle(
-                      color: HexColor.fromHex("#646464"),
+                      color: widget.isDiabled
+                          ? Colors.grey
+                          : HexColor.fromHex("#646464"),
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
                     ),

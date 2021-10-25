@@ -7,6 +7,7 @@ import 'package:flap/constante.dart';
 import 'package:flap/screens/main/body.dart';
 import 'package:flap/screens/main/main.dart';
 import 'package:flap/screens/main/unit.dart';
+import 'package:flap/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -174,7 +175,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(builder: (context) {
-                                          return const TopicsScreen();
+                                          return const ProfileScreen();
                                         }),
                                       );
                                     } else {

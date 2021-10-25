@@ -107,7 +107,7 @@ class _ListOfItemsState extends State<ListOfItems> {
                   ),
                 ),
                 SizedBox(
-                  height: size.height * 0.8,
+                  height: size.height * 0.77,
                   child: ListView.separated(
                     itemCount: objects.length,
                     separatorBuilder: (context, index) {
@@ -303,6 +303,83 @@ class _ListOfItemsPlainState extends State<ListOfItemsPlain> {
                           answers,
                         );
                       }),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ListOfItemsSearch extends StatefulWidget {
+  final Function itemBuilder;
+  final Function getObjects;
+  final String? searchPhrase;
+
+  const ListOfItemsSearch({
+    Key? key,
+    required this.itemBuilder,
+    required this.getObjects,
+    this.searchPhrase,
+  }) : super(key: key);
+
+  @override
+  _ListOfItemsSearchState createState() => _ListOfItemsSearchState();
+}
+
+class _ListOfItemsSearchState extends State<ListOfItemsSearch> {
+  var user = {};
+  var objects = [];
+
+  @override
+  void didUpdateWidget(covariant ListOfItemsSearch oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    widget.getObjects(widget.searchPhrase).then((value) {
+      setState(() {
+        objects = value;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getUserInfo().then((value) {
+      var data = jsonDecode(value.body);
+      setState(() {
+        user = data;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.only(top: 80, left: 12, right: 12),
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                SizedBox(
+                  height: size.height * 0.77,
+                  child: ListView.separated(
+                    itemCount: objects.length,
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        height: size.height * 0.01,
+                      );
+                    },
+                    itemBuilder: (context, index) =>
+                        widget.itemBuilder(context, index, objects, size),
+                  ),
                 ),
               ],
             ),
