@@ -2,6 +2,7 @@ import 'package:flap/screens/loader/loader.dart';
 import 'package:flap/screens/main/body.dart';
 import 'package:flap/screens/main/main.dart';
 import 'package:flap/screens/main/unit.dart';
+import 'package:flap/screens/profile/profile_screen.dart';
 import 'package:flap/screens/welcome/body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,6 +11,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'Requests/api_unit_requests.dart';
 import 'constante.dart';
+
+import 'package:flap/routes.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -52,11 +55,8 @@ class _MyAppState extends State<MyApp> {
           Theme.of(context).textTheme,
         ),
       ),
-      initialRoute: isAuth ? "/" : "/home",
-      routes: {
-        '/': (context) => const Scaffold(body: WelcomeScreen()),
-        '/home': (context) => const TopicsScreen()
-      },
+      initialRoute: isAuth ? WelcomeScreen.routeName : ProfileScreen.routeName,
+      routes: routes,
     );
   }
 }

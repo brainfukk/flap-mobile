@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-const String apiUrl = "http://localhost:8020/api/v1/auth/register/";
+const String apiUrl = "http://192.168.1.77:8020/api/v1/auth/register/";
 
 Future<http.Response> registerUser(username, email, password) async {
   var response = await http.post(

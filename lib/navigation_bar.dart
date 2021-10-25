@@ -1,6 +1,7 @@
 import 'package:flap/enums.dart';
-import 'package:flap/screens/main/body.dart';
+import 'package:flap/screens/main/main.dart';
 import 'package:flap/screens/profile/profile_screen.dart';
+import 'package:flap/screens/search/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flap/constante.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -37,10 +38,13 @@ class NavigationBar extends StatelessWidget {
                 icon: SvgPicture.asset("assets/icons/home-2.svg",
                     height: 120,
                     width: 120,
-                    color: MenuState.home == selectedMenu
+                    color: MenuState.search == selectedMenu
                         ? kPrimaryColor
                         : inActiveIconColor),
-                onPressed: () => Navigator.pushNamed(context, '/home')),
+                onPressed: () {
+                  // Navigator.pop(context);
+                  Navigator.pushNamed(context, SearchScreen.routeName);
+                }),
             IconButton(
                 icon: SvgPicture.asset("assets/icons/menu.svg",
                     height: 120,
@@ -49,8 +53,10 @@ class NavigationBar extends StatelessWidget {
                     color: MenuState.menu == selectedMenu
                         ? kPrimaryColor
                         : inActiveIconColor),
-                onPressed: () =>
-                    Navigator.pushNamed(context, MainScreen.routeName)),
+                onPressed: () {
+                  // Navigator.pop(context);
+                  Navigator.pushNamed(context, TopicsScreen.routeName);
+                }),
             IconButton(
                 icon: SvgPicture.asset("assets/icons/profile.svg",
                     height: 120,
@@ -59,8 +65,10 @@ class NavigationBar extends StatelessWidget {
                     color: MenuState.profile == selectedMenu
                         ? kPrimaryColor
                         : inActiveIconColor),
-                onPressed: () =>
-                    Navigator.pushNamed(context, ProfileScreen.routeName))
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, ProfileScreen.routeName);
+                }),
           ],
         ),
       ),

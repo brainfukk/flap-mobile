@@ -15,6 +15,9 @@ final String apiUrlUnitsExercises =
 final String apiUrlUnitsAnswers =
     "${dotenv.env['API_URL']}/resources/units/exercise/answer/";
 
+final String apiUrlUnitsSearch =
+    "${dotenv.env['API_URL']}/resources/units/search/";
+
 const storage = FlutterSecureStorage();
 
 Future<List<dynamic>> getTopics() async {
@@ -116,6 +119,24 @@ Future<dynamic> submitAnswers(
     {"unit_id": unitId, "answers": answers},
   );
 
+  String source = const Utf8Decoder().convert(response.bodyBytes);
+  return json.decode(source);
+}
+
+Future<List<dynamic>> searchForUnits(String searchPhrase) async {
+  var tokenMap = {
+    "access": await storage.read(key: "access_token"),
+    "refresh": await storage.read(key: "refresh_token")
+  };
+
+  var response = await getRequestWithVerifyAuth(
+    "GET",
+    apiUrlUnitsSearch,
+    tokenMap["access"],
+    tokenMap["refresh"],
+    {"search_phrase": searchPhrase},
+    {},
+  );
   String source = const Utf8Decoder().convert(response.bodyBytes);
   return json.decode(source);
 }

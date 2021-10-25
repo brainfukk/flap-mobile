@@ -104,6 +104,19 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                   return 0;
                 },
               );
+            } else if (val['type'] == 'FREE_IN_TEXT_ANSWER') {
+              return InTextWriteComponent(
+                content: val['content'],
+                exerciseId: val['id'],
+                callback: (exerciseId, value) {
+                  setState(
+                    () {
+                      answers[exerciseId.toString()] = value;
+                    },
+                  );
+                  return 0;
+                },
+              );
             }
             return const Text("ACTUALLY NOTHING");
           },

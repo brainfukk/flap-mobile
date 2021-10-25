@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-const String apiUrl = "http://localhost:8020/api/v1/auth/login/";
-const String refreshApiUrl = "http://localhost:8020/api/v1/auth/refresh/";
+const String apiUrl = "http://192.168.1.77:8020/api/v1/auth/login/";
+const String refreshApiUrl = "http://192.168.1.77:8020/api/v1/auth/refresh/";
 
 Future<http.Response> loginUser(String username, String password) async {
   var response = http.post(
