@@ -35,7 +35,7 @@ class _ProfileCardState extends State<ProfileCard> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Coming soon..."),
-      content: Text("Disabled. Technical updating"),
+      content: Text("Disabled. Technical update"),
       actions: [
         okButton,
       ],
